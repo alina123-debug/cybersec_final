@@ -13,14 +13,12 @@ SEVERITIES = ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
 INCIDENTS = ["BRUTE_FORCE", "SQL_INJECTION", "XSS", "PATH_TRAVERSAL", "WINDOWS_SERVICE"]
 
 def _sleep_realistic():
-    #иногда часто, иногда редко
     delay = random.choice([
-        random.randint(10, 25),      # быстрый демо-режим: 10–25 сек
-        random.randint(60, 180),     # 1–3 мин
-        random.randint(300, 600),    # 5–10 мин
-        random.randint(900, 1800),   # 15–30 мин
-        random.randint(3600, 7200),  # 1–2 часа
+        random.randint(5, 15),
+        random.randint(15, 40),
+        random.randint(40, 90),
     ])
+
     time.sleep(delay)
 
 def _create_event():

@@ -78,3 +78,80 @@
   opacity:1 !important;
   font-weight:600;
 }
+body, .app-bg {
+  color: #F3F7FF;
+}
+
+.card-dark,
+.card-dark *{
+  color: #F3F7FF !important;
+  opacity: 1 !important;
+}
+
+.text-secondary,
+.text-muted,
+.small,
+small{
+  color: #F3F7FF !important;
+  opacity: 1 !important;
+}
+
+.card-dark h1, .card-dark h2, .card-dark h3, .card-dark h4, .card-dark h5,
+.card-dark li, .card-dark p, .card-dark label, .card-dark span, .card-dark div{
+  color: #F3F7FF !important;
+  opacity: 1 !important;
+}
+
+.card-dark .form-control,
+.card-dark .form-select{
+  color: #F3F7FF !important;
+}
+
+.card-dark .form-control::placeholder{
+  color: rgba(243,247,255,.75) !important;
+  opacity: 1 !important;
+}
+
+select.form-select,
+select.form-select option {
+  color: #111827 !important;
+  background: #ffffff !important;
+}
+
+
+select.form-select:focus {
+  color: #111827 !important;
+  background: #ffffff !important;
+}
+
+.card-dark input.form-control,
+.card-dark textarea.form-control,
+.card-dark select.form-select {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+
+.card-dark input.form-control::placeholder,
+.card-dark textarea.form-control::placeholder {
+  color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+
+.card-dark select.form-select option {
+  color: #111827 !important;
+  background: #ffffff !important;
+}
+
+
+.card-dark input.form-control:disabled,
+.card-dark input.form-control[readonly],
+.card-dark textarea.form-control:disabled,
+.card-dark textarea.form-control[readonly],
+.card-dark select.form-select:disabled {
+  color: #374151 !important;
+  -webkit-text-fill-color: #374151 !important;
+  background-color: #f3f4f6 !important;
+}
