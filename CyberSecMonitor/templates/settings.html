@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-3">Settings</h2>
+
+<div class="card card-dark p-3">
+  <form method="post">
+    {% csrf_token %}
+    <label class="form-label small text-secondary">UI Language</label>
+    <select class="form-select form-select-sm" name="ui_lang">
+      <option value="en" {% if lang == 'en' %}selected{% endif %}>English</option>
+      <option value="ru" {% if lang == 'ru' %}selected{% endif %}>Русский</option>
+    </select>
+    <button class="btn btn-sm btn-primary mt-3" type="submit">Save</button>
+  </form>
+
+  <hr class="border-secondary">
+  <div class="small text-secondary">
+    Note: This is a lightweight language toggle stored in the session (demo). Full translation (django-i18n) can be added later.
+  </div>
+</div>
+{% endblock %}

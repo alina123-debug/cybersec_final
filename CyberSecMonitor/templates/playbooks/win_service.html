@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="mb-3">Playbook: Suspicious Windows Service</h2>
+
+<div class="card card-dark p-3 mb-3">
+  <div class="small text-secondary">Investigation guide: check false positive first, then collect evidence, then contain/eradicate, then lessons learned.</div>
+</div>
+
+<div class="card card-dark p-3">
+  <h5>1) False Positive check</h5>
+  <ul>
+    <li>Is it a legitimate software update/service?</li>
+    <li>Is the binary signed by a trusted vendor?</li>
+  </ul>
+
+  <h5>2) Evidence</h5>
+  <ul>
+    <li>service_name, service_path, start time</li>
+    <li>hashes + signer info</li>
+    <li>process tree + network connections</li>
+  </ul>
+
+  <h5>3) Example queries (5)</h5>
+  <pre class="prebox">windows.service_install where service_name == &lt;NAME&gt; last 24h</pre>
+  <pre class="prebox">edr.process where path == &lt;PATH&gt; and time within incident</pre>
+  <pre class="prebox">edr.network where host == &lt;HOST&gt; and time within incident</pre>
+  <pre class="prebox">registry.run_keys where host == &lt;HOST&gt; last 7d</pre>
+  <pre class="prebox">hash.lookup where sha256 == &lt;HASH&gt;</pre>
+
+  <h5>4) Response</h5>
+  <ol>
+    <li>Isolate host if confirmed malicious.</li>
+    <li>Disable service, quarantine binary.</li>
+    <li>Collect artifacts for IR report.</li>
+  </ol>
+</div>
+{% endblock %}

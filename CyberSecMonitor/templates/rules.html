@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-3">Rules</h2>
+
+<div class="card card-dark p-3 mb-3">
+  <div class="small text-secondary">
+    Rules define detection logic (custom query template), default severity, response steps, and SLA expectations.
+  </div>
+</div>
+
+<div class="card card-dark p-3">
+  <div class="table-responsive">
+    <table class="table table-dark table-sm align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Severity</th>
+          <th>Query template</th>
+          <th>Response steps</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rules %}
+        <tr>
+          <td class="fw-semibold">{{ r.name }}</td>
+          <td>{{ r.incident_type }}</td>
+          <td>{{ r.severity }}</td>
+          <td><pre class="prebox">{{ r.query_template }}</pre></td>
+          <td><pre class="prebox">{{ r.response_steps }}</pre></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-secondary">No rules yet. Run: python manage.py seed_demo_data</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

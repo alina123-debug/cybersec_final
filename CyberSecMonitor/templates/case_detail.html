@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2 class="m-0">CASE-{{ case.id }}</h2>
+    <div class="small text-secondary">{{ case.created_at }} • {{ case.client.name }}</div>
+  </div>
+  <a class="btn btn-sm btn-outline-light" href="/cases/">Back</a>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-7">
+    <div class="card card-dark p-3 mb-3">
+      <div class="d-flex justify-content-between">
+        <div class="fw-semibold">Incident</div>
+        <div class="badge bg-secondary">{{ case.severity }} • {{ case.incident_type }}</div>
+      </div>
+      <div class="mt-2">
+        <label class="form-label small text-secondary">Case title</label>
+        <input class="form-control form-control-sm" id="caseTitle" value="{{ case.title }}">
+      </div>
+      <div class="mt-2">
+        <label class="form-label small text-secondary">Description</label>
+        <textarea class="form-control form-control-sm" rows="4" id="caseDesc">{{ case.description }}</textarea>
+      </div>
+
+      <div class="row g-2 mt-2">
+        <div class="col-6">
+          <label class="form-label small text-secondary">Analyst name</label>
+          <input class="form-control form-control-sm" id="analystName" value="{{ case.analyst_name }}">
+        </div>
+        <div class="col-6">
+          <label class="form-label small text-secondary">Analyst group</label>
+          <input class="form-control form-control-sm" id="analystGroup" value="{{ case.analyst_group }}">
+        </div>
+      </div>
+
+      <div class="row g-2 mt-2">
+        <div class="col-6">
+          <label class="form-label small text-secondary">Status</label>
+          <select class="form-select form-select-sm" id="caseStatus">
+            {% for s in statuses %}<option value="{{ s }}" {% if case.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="col-6">
+          <label class="form-label small text-secondary">Verdict</label>
+          <select class="form-select form-select-sm" id="caseVerdict">
+            {% for v in verdicts %}<option value="{{ v }}" {% if case.verdict == v %}selected{% endif %}>{{ v }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-sm btn-primary" onclick="window.MONITOR.saveCase({{ case.id }})">Save</button>
+        <a class="btn btn-sm btn-outline-info" href="/playbooks/{% if case.incident_type == 'BRUTE_FORCE' %}bruteforce{% elif case.incident_type == 'SQL_INJECTION' %}sqli{% elif case.incident_type == 'XSS' %}xss{% elif case.incident_type == 'PATH_TRAVERSAL' %}path-traversal{% else %}win-service{% endif %}/">Open Playbook</a>
+      </div>
+    </div>
+
+    <div class="card card-dark p-3">
+      <div class="fw-semibold mb-2">Tasks (1–5)</div>
+      <div class="list-group list-group-flush">
+        {% for t in case.tasks.all %}
+          <button class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center" onclick="window.MONITOR.toggleTask({{ case.id }}, {{ t.id }})">
+            <span>
+              {% if t.done %}✅{% else %}⬜{% endif %} {{ t.title }}
+            </span>
+            <span class="small text-secondary">toggle</span>
+          </button>
+        {% empty %}
+          <div class="text-secondary small">No tasks yet</div>
+        {% endfor %}
+      </div>
+
+      <div class="mt-2 d-flex gap-2">
+        <input class="form-control form-control-sm" id="newTaskTitle" placeholder="New task title...">
+        <button class="btn btn-sm btn-outline-light" onclick="window.MONITOR.addTask({{ case.id }})">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-5">
+    <div class="card card-dark p-3 mb-3">
+      <div class="fw-semibold mb-2">Key Fields</div>
+      <div class="row g-2 small">
+        <div class="col-6 text-secondary">Source IP</div><div class="col-6">{{ case.source_ip }}</div>
+        <div class="col-6 text-secondary">Host IP</div><div class="col-6">{{ case.host_ip }}</div>
+        <div class="col-6 text-secondary">Hostname</div><div class="col-6">{{ case.hostname }}</div>
+
+        {% if case.evidence.service_name %}
+        <div class="col-6 text-secondary">Service name</div><div class="col-6">{{ case.evidence.service_name }}</div>
+        <div class="col-6 text-secondary">Service path</div><div class="col-6">{{ case.evidence.service_path }}</div>
+        <div class="col-6 text-secondary">Event start</div><div class="col-6">{{ case.evidence.event_start_date }}</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card card-dark p-3">
+      <div class="fw-semibold mb-2">Dispatch / Escalation</div>
+      <div class="small text-secondary mb-2">Choose where to send this case: Telegram or SIEM (TheHive-like). Select responsible people for the client (demo list).</div>
+
+      <label class="form-label small text-secondary">Channel</label>
+      <select class="form-select form-select-sm" id="dispatchChannel">
+        <option value="TELEGRAM">Telegram</option>
+        <option value="SIEM">SIEM (OpenCTI-like)</option>
+      </select>
+
+      <label class="form-label small text-secondary mt-2">Recipients (demo)</label>
+      <select class="form-select form-select-sm" multiple id="dispatchRecipients">
+        {% for e in employees %}
+          <option value="{{ e.telegram_handle|default:e.email }}">{{ e.full_name }} ({{ e.role }})</option>
+        {% endfor %}
+        <option value="opencti-system">OpenCTI system</option>
+      </select>
+
+      <button class="btn btn-sm btn-success mt-3" onclick="window.MONITOR.dispatchCase({{ case.id }})">Send</button>
+
+      <div class="mt-3 small text-secondary">
+        Note: dispatch is logged in DB (Dispatch table). This is a demo, it does not actually send messages.
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+window.MONITOR.initCaseDetail({{ case.id }});
+</script>
+{% endblock %}

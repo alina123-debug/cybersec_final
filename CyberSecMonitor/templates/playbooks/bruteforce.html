@@ -1,0 +1,41 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="mb-3">Playbook: Brute Force</h2>
+
+<div class="card card-dark p-3 mb-3">
+  <div class="small text-secondary">Investigation guide: check false positive first, then collect evidence, then contain/eradicate, then lessons learned.</div>
+</div>
+
+<div class="card card-dark p-3">
+  <h5>1) False Positive check</h5>
+  <ul>
+    <li>Is source IP internal/VPN/known admin jumpbox?</li>
+    <li>Is the username a service account with expected rotations?</li>
+    <li>Are there maintenance windows?</li>
+  </ul>
+
+  <h5>2) Evidence to collect</h5>
+  <ul>
+    <li>source_ip, username, attempts, time window</li>
+    <li>successful login events after failed attempts</li>
+    <li>geo/ASN reputation (optional)</li>
+  </ul>
+
+  <h5>3) Example SIEM queries (5)</h5>
+  <pre class="prebox">auth.failed where src_ip == &lt;IP&gt; and user == &lt;USER&gt; last 1h</pre>
+  <pre class="prebox">auth.success where user == &lt;USER&gt; and after == incident_time - 10m</pre>
+  <pre class="prebox">windows.security_event where event_id in (4625,4624) and ip == &lt;IP&gt;</pre>
+  <pre class="prebox">firewall.deny where src_ip == &lt;IP&gt; last 24h</pre>
+  <pre class="prebox">users.lockouts where user == &lt;USER&gt; last 7d</pre>
+
+  <h5>4) Response</h5>
+  <ol>
+    <li>Confirm brute-force pattern (rate + failures).</li>
+    <li>Block IP (temporary) if malicious.</li>
+    <li>Force password reset / MFA check for targeted account.</li>
+    <li>Create SIEM case + notify client owners.</li>
+  </ol>
+
+  <h5>5) SLA</h5>
+  <p class="text-secondary">Critical: 15–60m • High: 1–4h • Medium: 4–8h • Low: 24–72h</p>
+</div>
+{% endblock %}

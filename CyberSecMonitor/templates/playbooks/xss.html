@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="mb-3">Playbook: XSS</h2>
+
+<div class="card card-dark p-3 mb-3">
+  <div class="small text-secondary">Investigation guide: check false positive first, then collect evidence, then contain/eradicate, then lessons learned.</div>
+</div>
+
+<div class="card card-dark p-3">
+  <h5>1) False Positive check</h5>
+  <ul><li>Is payload encoded but harmless? Was it reflected/stored?</li></ul>
+
+  <h5>2) Evidence</h5>
+  <ul>
+    <li>Parameter name/value, affected page, user/session</li>
+    <li>CSP headers, sanitization logs</li>
+  </ul>
+
+  <h5>3) Example queries (5)</h5>
+  <pre class="prebox">web.access where url contains &quot;&lt;script&quot; last 24h</pre>
+  <pre class="prebox">app.logs where message contains &quot;sanitize&quot; and time within incident</pre>
+  <pre class="prebox">waf.logs where rule == &quot;xss&quot; and src_ip == &lt;IP&gt;</pre>
+  <pre class="prebox">sessions where user == &lt;USER&gt; and ip == &lt;IP&gt; last 1h</pre>
+  <pre class="prebox">incident.search similar_payload hash(payload) last 7d</pre>
+
+  <h5>4) Response</h5>
+  <ol>
+    <li>Confirm reflection/storage.</li>
+    <li>Fix output encoding + input sanitization.</li>
+    <li>Rotate affected user sessions if needed.</li>
+  </ol>
+</div>
+{% endblock %}

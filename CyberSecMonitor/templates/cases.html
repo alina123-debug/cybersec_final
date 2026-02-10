@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">Cases</h2>
+  <div class="small text-secondary">Click a case to open details</div>
+</div>
+
+<div class="card card-dark p-3 mb-3">
+  <form class="row g-2" id="caseFilterForm">
+    <div class="col-12 col-md-3">
+      <label class="form-label small text-secondary">Incident type</label>
+      <select class="form-select form-select-sm" name="incident_type">
+        <option value="">Any</option>
+        {% for t in incident_types %}
+          <option value="{{ t }}" {% if type_filter == t %}selected{% endif %}>{{ t }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-2">
+      <label class="form-label small text-secondary">Severity</label>
+      <select class="form-select form-select-sm" name="severity">
+        <option value="">Any</option>
+        {% for s in severities %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-2">
+      <label class="form-label small text-secondary">Status</label>
+      <select class="form-select form-select-sm" name="status">
+        <option value="">Any</option>
+        {% for s in statuses %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-2">
+      <label class="form-label small text-secondary">Verdict</label>
+      <select class="form-select form-select-sm" name="verdict">
+        <option value="">Any</option>
+        {% for v in verdicts %}<option value="{{ v }}">{{ v }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-12 col-md-1">
+      <label class="form-label small text-secondary">Today</label>
+      <select class="form-select form-select-sm" name="today">
+        <option value="">Any</option>
+        <option value="1">Today</option>
+      </select>
+    </div>
+    <div class="col-12 col-md-2 d-flex align-items-end gap-2">
+      <button class="btn btn-sm btn-primary" type="submit">Apply</button>
+      <a class="btn btn-sm btn-outline-light" href="/cases/">Reset</a>
+    </div>
+  </form>
+</div>
+
+<div class="card card-dark p-3">
+  <div class="table-responsive">
+    <table class="table table-dark table-sm align-middle mb-0">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Time</th>
+          <th>Severity</th>
+          <th>Type</th>
+          <th>Title</th>
+          <th>Status</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody id="casesTbody">
+        <tr><td colspan="7" class="text-secondary">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+window.MONITOR.initCasesPage();
+</script>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="mb-3">Playbook: SQL Injection</h2>
+
+<div class="card card-dark p-3 mb-3">
+  <div class="small text-secondary">Investigation guide: check false positive first, then collect evidence, then contain/eradicate, then lessons learned.</div>
+</div>
+
+<div class="card card-dark p-3">
+  <h5>1) False Positive check</h5>
+  <ul>
+    <li>Is it a security scan from approved vendor?</li>
+    <li>Did WAF already block it?</li>
+  </ul>
+
+  <h5>2) Evidence</h5>
+  <ul>
+    <li>URL + query string, HTTP method, user-agent</li>
+    <li>WAF action (block/allow), response codes</li>
+    <li>Any DB errors/timeouts around the same time</li>
+  </ul>
+
+  <h5>3) Example queries (5)</h5>
+  <pre class="prebox">waf.logs where url contains (&quot; OR &quot;) or url contains &quot;UNION SELECT&quot;</pre>
+  <pre class="prebox">web.access where src_ip == &lt;IP&gt; and url contains &quot;%27&quot; last 1h</pre>
+  <pre class="prebox">app.errors where message contains &quot;SQL&quot; and time within incident +/- 10m</pre>
+  <pre class="prebox">db.audit where statement like &quot;%UNION%&quot; and time within incident +/- 10m</pre>
+  <pre class="prebox">threatintel where indicator == &lt;IP&gt;</pre>
+
+  <h5>4) Response</h5>
+  <ol>
+    <li>Confirm exploitability (did it reach DB?).</li>
+    <li>Block payload/IP with WAF rules.</li>
+    <li>Patch input validation, parameterized queries.</li>
+  </ol>
+</div>
+{% endblock %}

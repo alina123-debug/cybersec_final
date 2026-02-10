@@ -1,0 +1,80 @@
+:root{
+  --bg:#121826;
+  --panel:#1b2232;
+  --panel2:#232c3f;
+  --border:#2b3750;
+  --accent:#4aa3ff;
+}
+
+.app-bg{ background: var(--bg); }
+.sidebar{
+  width: 260px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #171e2c, #121826);
+  border-right: 1px solid var(--border);
+  display:flex;
+  flex-direction:column;
+}
+.brand{ display:flex; gap:12px; align-items:center; }
+.logo{ width:42px; height:42px; border-radius:12px; background: #2f7bdc; box-shadow:0 8px 24px rgba(74,163,255,.15); }
+.nav-link{ border-radius: 10px; padding: 10px 12px; color:#dfe7ff !important; opacity:.85; }
+.nav-link:hover{ background: rgba(255,255,255,.04); opacity:1; }
+.nav-link.active{ background: rgba(74,163,255,.12); border: 1px solid rgba(74,163,255,.25); }
+.card-dark{
+  background: linear-gradient(180deg, var(--panel), var(--panel2));
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(0,0,0,.25);
+}
+.pill{
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display:flex;
+  justify-content:space-between;
+}
+.pill *{
+  color:#F3F7FF !important;
+  opacity:1 !important;
+}
+.metric .big{ font-size: 34px; font-weight: 700; line-height: 1; }
+.prebox{
+  background: rgba(0,0,0,.25);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  padding: 10px;
+  white-space: pre-wrap;
+  margin: 0;
+  font-size: 12px;
+}
+.list-group-item-dark{
+  background: rgba(255,255,255,.03);
+  color: #eaf1ff;
+  border-color: rgba(255,255,255,.06);
+}
+.table-dark{
+  --bs-table-bg: transparent;
+  --bs-table-border-color: rgba(255,255,255,.06);
+}
+.card-dark{
+  border: 1px solid rgba(255,255,255,.10);
+}
+#severityChart{
+  filter:none !important;
+  opacity:1 !important;
+}
+.pill{
+  color:#F3F7FF !important;
+}
+
+.pill .text-muted,
+.pill .text-secondary,
+.pill small,
+.pill label,
+.pill span:first-child,
+.pill div:first-child{
+  color:#F3F7FF !important;
+  opacity:1 !important;
+  font-weight:600;
+}

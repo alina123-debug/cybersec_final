@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block content %}
+<h2 class="mb-3">Playbook: Path Traversal</h2>
+
+<div class="card card-dark p-3 mb-3">
+  <div class="small text-secondary">Investigation guide: check false positive first, then collect evidence, then contain/eradicate, then lessons learned.</div>
+</div>
+
+<div class="card card-dark p-3">
+  <h5>1) False Positive check</h5>
+  <ul><li>Is it a known scanner? Did server normalize paths and block it?</li></ul>
+
+  <h5>2) Evidence</h5>
+  <ul>
+    <li>Requested file path, server response code</li>
+    <li>File access logs, error logs</li>
+  </ul>
+
+  <h5>3) Example queries (5)</h5>
+  <pre class="prebox">web.access where url contains &quot;../&quot; or url contains &quot;%2e%2e%2f&quot;</pre>
+  <pre class="prebox">server.fs_access where path contains &quot;passwd&quot; and time within incident</pre>
+  <pre class="prebox">waf.logs where rule == &quot;path_traversal&quot; and src_ip == &lt;IP&gt;</pre>
+  <pre class="prebox">app.errors where message contains &quot;Invalid path&quot; within incident</pre>
+  <pre class="prebox">threatintel reputation for src_ip == &lt;IP&gt;</pre>
+
+  <h5>4) Response</h5>
+  <ol>
+    <li>Confirm whether sensitive file was accessed.</li>
+    <li>Patch path validation; use allow-list.</li>
+    <li>Block malicious IPs and monitor for repeats.</li>
+  </ol>
+</div>
+{% endblock %}
